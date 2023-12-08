@@ -1,6 +1,5 @@
 # Move.Food - Cardápio Virtual
 
-
 Move.Food é uma plataforma inovadora que oferece uma experiência de cardápio virtual para lanchonetes e restaurantes. Tornamos mais fácil do que nunca para os clientes visualizarem, selecionarem e efetuarem pedidos diretamente do conforto de seus dispositivos móveis.
 
 ## Recursos Principais
