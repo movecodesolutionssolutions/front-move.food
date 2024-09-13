@@ -1,10 +1,33 @@
 import { Input } from "../../Components/Input";
 import { Button } from "../../Components/Button";
-// import { useLoginController } from "./useLoginController";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../../Context/AuthProvider/useAuth";
+import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
+
+const userSinginSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+
+type userSiginTypesSchema = z.infer<typeof userSinginSchema>;
 
 export function Login() {
-  // const { handleSubmit, register, errors, isLoading } = useLoginController();
+  const auth = useAuth();
+  const { register, handleSubmit } = useForm<userSiginTypesSchema>({
+    resolver: zodResolver(userSinginSchema),
+  });
 
+  const handleSingin = async (data: userSiginTypesSchema) => {
+    try {
+      await auth.authenticate(data.email, data.password);
+      <Navigate to="/Dashboard" />;
+    } catch (err) {
+      toast.error("Senha ou email errado");
+    }
+  };
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="w-full max-w-md">
@@ -19,10 +42,17 @@ export function Login() {
           </h1>
         </header>
 
-        <form className="mt-8 flex flex-col gap-4">
-          <Input type="email" placeholder="E-mail" name="email" />
+        <form
+          className="mt-8 flex flex-col gap-4"
+          onSubmit={handleSubmit(handleSingin)}
+        >
+          <Input type="email" placeholder="E-mail" {...register("email")} />
 
-          <Input type="password" placeholder="Senha" name="password" />
+          <Input
+            type="password"
+            placeholder="Senha"
+            {...register("password")}
+          />
 
           <Button
             type="submit"
